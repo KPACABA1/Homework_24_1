@@ -8,4 +8,4 @@ class UserSerializer(ModelSerializer):
     class Meta:
         model = User
         # exclude = ('password1', 'password2')
-        fields = '__all__'g
+        fields = '__all__'
