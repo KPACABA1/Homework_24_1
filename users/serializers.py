@@ -9,3 +9,5 @@ class UserSerializer(ModelSerializer):
         model = User
         # exclude = ('password1', 'password2')
         fields = '__all__'
+virtualenv venv
+source venv/bin/activate
