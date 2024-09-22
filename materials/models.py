@@ -22,8 +22,7 @@ class Course(models.Model):
     preview = models.ImageField(verbose_name='Превью(изображение)', null=True, blank=True, upload_to='materials/course')
     description = models.TextField(verbose_name='Описание')
 
-    lesson = models.ManyToManyField(Lesson, verbose_name="Уроки курса", null=True, blank=True,
-                                                  related_name="lessons")
+    lesson = models.ManyToManyField(Lesson, verbose_name="Уроки курса", related_name="lessons")
 
     class Meta:
         verbose_name = 'Курс'
