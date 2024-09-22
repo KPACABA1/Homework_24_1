@@ -7,3 +7,4 @@ sqlparse
 django-phonenumber-field
 phonenumberslite
 pillow
+django-filter

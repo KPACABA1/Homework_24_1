@@ -45,8 +45,9 @@ INSTALLED_APPS = [
 
     # Мои приложения
     'rest_framework',
+    'django_filters',
     'materials',
-    'users'
+    'users',
 ]
 
 MIDDLEWARE = [
@@ -142,6 +143,7 @@ MEDIA_ROOT = BASE_DIR / 'media'
 # Настройки для работы с пользователями
 AUTH_USER_MODEL = 'users.User'
 
-# Настройка для того чтобы пользователя перекидывало на рассылки после авторизации
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = '/'
+# Настройка для возможности фильтрации в вьюшках
+REST_FRAMEWORK = {
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+}
