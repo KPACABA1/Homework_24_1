@@ -1,12 +1,11 @@
 from django.db import models
 
 # Create your models here.
-class Lesson(models.Model):
-    """Модель урока"""
+class Course(models.Model):
+    """Модель курса"""
     title = models.CharField(max_length=35, verbose_name='название')
+    preview = models.ImageField(verbose_name='Превью(изображение)', null=True, blank=True, upload_to='materials/course')
     description = models.TextField(verbose_name='Описание')
-    preview = models.ImageField(verbose_name='Превью(изображение)', null=True, blank=True, upload_to='materials/lesson')
-    link_to_video = models.TextField(verbose_name='Ссылка на видео', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Курс'
@@ -16,13 +15,14 @@ class Lesson(models.Model):
         return f'{self.title}'
 
 
-class Course(models.Model):
-    """Модель курса"""
+class Lesson(models.Model):
+    """Модель урока"""
     title = models.CharField(max_length=35, verbose_name='название')
-    preview = models.ImageField(verbose_name='Превью(изображение)', null=True, blank=True, upload_to='materials/course')
     description = models.TextField(verbose_name='Описание')
-
-    lesson = models.ManyToManyField(Lesson, verbose_name="Уроки курса", related_name="lessons")
+    preview = models.ImageField(verbose_name='Превью(изображение)', null=True, blank=True, upload_to='materials/lesson')
+    link_to_video = models.TextField(verbose_name='Ссылка на видео', null=True, blank=True)
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, verbose_name='Курс',
+                                    related_name='course', null=True, blank=True)
 
     class Meta:
         verbose_name = 'Курс'
