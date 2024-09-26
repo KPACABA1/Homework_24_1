@@ -35,8 +35,9 @@ class Payment(models.Model):
     paid_lesson = models.ForeignKey(Lesson, on_delete=models.SET_NULL, verbose_name='Оплаченный урок',
                                     related_name='paid_lesson', null=True, blank=True)
     payment_amount = models.PositiveIntegerField(verbose_name='Сумма оплаты')
-    payment_method = models.BooleanField(default=True, verbose_name='Тип оплаты(если True - безнал, Если False - '
-                                                                    'наличка)')
+    payment_method = models.CharField(max_length=37,
+                                      choices=(('cash', 'Наличные'), ('non-cash', 'Безнал'), ('cash and non-cash', 'Частично наличные и частично безнал')),
+                                      verbose_name='Способ оплаты(3 на выбор)')
 
     class Meta:
         verbose_name = 'Платеж'
