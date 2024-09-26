@@ -20,20 +20,22 @@ class CourseSerializer(ModelSerializer):
     # Добавляю дополнительное поле - количество уроков
     number_of_lessons = SerializerMethodField()
 
-    # Добавляю поле вывода всей информации по урокам
-    lesson_info = SerializerMethodField()
+    lesson_info = LessonSerializer(many=True)
+
+    # # Добавляю поле вывода всей информации по урокам
+    # lesson_info = SerializerMethodField()
 
     def get_number_of_lessons(self, course):
         """Метод для получения дополнительного поля - количество уроков"""
         return course.course.count()
 
-    def get_lesson_info(self, course):
-        """Метод для получения всей информации по урокам"""
-        # Получаю все уроки, связанные с курсом
-        lesson = Lesson.objects.filter(course=course)
-        # Перевожу все полученные модели в формат JSON
-        json_lesson = json.loads(serialize('json', lesson))
-        return json_lesson
+    # def get_lesson_info(self, course):
+    #     """Метод для получения всей информации по урокам"""
+    #     # Получаю все уроки, связанные с курсом
+    #     lesson = Lesson.objects.filter(course=course)
+    #     # Перевожу все полученные модели в формат JSON
+    #     json_lesson = json.loads(serialize('json', lesson))
+    #     return json_lesson
 
     class Meta:
         model = Course
