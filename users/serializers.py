@@ -16,15 +16,7 @@ class PaymentSerializer(ModelSerializer):
 class UserSerializer(ModelSerializer):
     """Сериализатор для моделей пользователей"""
     # Добавляю поле платежи, чтобы выводилась история платежей пользователя
-    payment_history = SerializerMethodField()
-
-    def get_payment_history(self, user):
-        """Метод для получения поля история платежей"""
-        # Получаю все платежи, связанные с пользователем
-        payment = Payment.objects.filter(user=user)
-        # Перевожу все полученные модели в формат JSON
-        json_payment = json.loads(serialize('json', payment))
-        return json_payment
+    payment_history = PaymentSerializer(many=True, source='user')
 
     class Meta:
         model = User
