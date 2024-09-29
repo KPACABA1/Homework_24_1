@@ -3,10 +3,6 @@ from rest_framework.serializers import ModelSerializer
 
 from materials.models import Course, Lesson
 
-import json
-
-from django.core.serializers import serialize
-
 
 class LessonSerializer(ModelSerializer):
     """Сериализатор для моделей уроков"""

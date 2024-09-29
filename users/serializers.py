@@ -1,7 +1,4 @@
-import json
-
-from rest_framework.serializers import ModelSerializer, SerializerMethodField
-from django.core.serializers import serialize
+from rest_framework.serializers import ModelSerializer
 
 from users.models import User, Payment
 
