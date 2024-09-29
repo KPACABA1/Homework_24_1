@@ -10,11 +10,25 @@ class PaymentSerializer(ModelSerializer):
         fields = '__all__'
 
 
+class UserCreateSerializer(ModelSerializer):
+    """Сериализатор для создания моделей пользователей"""
+    class Meta:
+        model = User
+        fields = ('email', 'phone_number', 'city', 'profile_picture')
+
+
+class UserUpdateSerializer(ModelSerializer):
+    """Сериализатор для моделей пользователей, кроме создания"""
+    class Meta:
+        model = User
+        fields = ('email', 'phone_number', 'city', 'profile_picture')
+
+
 class UserSerializer(ModelSerializer):
-    """Сериализатор для моделей пользователей"""
+    """Сериализатор для моделей пользователей, кроме создания и редактирования"""
     # Добавляю поле платежи, чтобы выводилась история платежей пользователя
     payment_history = PaymentSerializer(many=True, source='user')
 
     class Meta:
         model = User
-        fields = ('email', 'phone_number', 'city', 'profile_picture', 'payment_history')
+        fields = ('id', 'email', 'phone_number', 'city', 'profile_picture', 'payment_history')

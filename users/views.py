@@ -1,8 +1,8 @@
-from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView
+from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, RetrieveAPIView, DestroyAPIView
 from rest_framework import filters
 
 from users.models import User, Payment
-from users.serializers import UserSerializer, PaymentSerializer
+from users.serializers import UserSerializer, PaymentSerializer, UserCreateSerializer, UserUpdateSerializer
 
 from django_filters.rest_framework import DjangoFilterBackend
 
@@ -11,7 +11,7 @@ from django_filters.rest_framework import DjangoFilterBackend
 class UserCreateAPIView(CreateAPIView):
     """Класс для создания моделей пользователей"""
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UserCreateSerializer
 
 
 class UserListAPIView(ListAPIView):
@@ -23,8 +23,20 @@ class UserListAPIView(ListAPIView):
 class UserUpdateAPIView(UpdateAPIView):
     """Класс для редактирования моделей пользователей"""
     queryset = User.objects.all()
+    serializer_class = UserUpdateSerializer
+
+
+class UserRetrieveAPIView(RetrieveAPIView):
+    """Класс для просмотра детальной информации об отдельном пользователе"""
+    queryset = User.objects.all()
     serializer_class = UserSerializer
 
+
+
+class UserDestroyAPIView(DestroyAPIView):
+    """Класс для удаления пользователя"""
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
 
 class PaymentCreateAPIView(CreateAPIView):
     """Класс для создания платежей пользователей"""
