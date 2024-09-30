@@ -1,5 +1,6 @@
 from rest_framework.generics import CreateAPIView, ListAPIView, UpdateAPIView, RetrieveAPIView, DestroyAPIView
 from rest_framework import filters
+from rest_framework.permissions import AllowAny
 
 from users.models import User, Payment
 from users.serializers import UserSerializer, PaymentSerializer, UserCreateSerializer, UserUpdateSerializer
@@ -12,6 +13,16 @@ class UserCreateAPIView(CreateAPIView):
     """Класс для создания моделей пользователей"""
     queryset = User.objects.all()
     serializer_class = UserCreateSerializer
+    permission_classes = (AllowAny,)
+
+    def perform_create(self, serializer):
+        """Вмешиваюсь в логику контроллера для его правильной регистрации пользователей"""
+        # Сохраняю пользователя и сразу делаю его активным
+        user = serializer.save(is_active=True)
+
+        # Хэширую пароль пользователя и сохраняю пользователя
+        user.set_password(user.password)
+        user.save()
 
 
 class UserListAPIView(ListAPIView):

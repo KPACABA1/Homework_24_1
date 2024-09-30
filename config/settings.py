@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+from datetime import timedelta
 from pathlib import Path
 
 # Импортирую данные для входа в почту и данные для входа в базу данных
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'django_filters',
     'materials',
     'users',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -145,5 +146,19 @@ AUTH_USER_MODEL = 'users.User'
 
 # Настройка для возможности фильтрации в вьюшках
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend']
+    'DEFAULT_FILTER_BACKENDS': ['django_filters.rest_framework.DjangoFilterBackend'],
+    # Настройка для авторизации с помощью JWT токена
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+            'rest_framework_simplejwt.authentication.JWTAuthentication',
+        ),
+    # Настройка для того, чтобы закрыть эндпоинты для неавторизованных пользователей
+    'DEFAULT_PERMISSION_CLASSES': [
+            'rest_framework.permissions.IsAuthenticated',
+        ]
+}
+
+# Настройка жизни ACCESS и REFRESH токенов
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1)
 }

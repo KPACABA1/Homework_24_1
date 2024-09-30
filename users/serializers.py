@@ -14,7 +14,7 @@ class UserCreateSerializer(ModelSerializer):
     """Сериализатор для создания моделей пользователей"""
     class Meta:
         model = User
-        fields = ('email', 'phone_number', 'city', 'profile_picture')
+        fields = ('email', 'phone_number', 'city', 'profile_picture', 'password')
 
 
 class UserUpdateSerializer(ModelSerializer):
@@ -31,4 +31,4 @@ class UserSerializer(ModelSerializer):
 
     class Meta:
         model = User
-        fields = ('id', 'email', 'phone_number', 'city', 'profile_picture', 'payment_history')
+        fields = ('id', 'email', 'phone_number', 'city', 'profile_picture', 'payment_history', 'password')

@@ -8,3 +8,4 @@ django-phonenumber-field
 phonenumberslite
 pillow
 django-filter
+djangorestframework-simplejwt==5.3.1
