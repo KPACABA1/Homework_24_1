@@ -4,7 +4,7 @@ from config.settings import AUTH_USER_MODEL
 
 # Create your models here.
 class Course(models.Model):
-    """Модель курса"""
+    """Модель курса."""
     title = models.CharField(max_length=35, verbose_name='название')
     preview = models.ImageField(verbose_name='Превью(изображение)', null=True, blank=True, upload_to='materials/course')
     description = models.TextField(verbose_name='Описание')
@@ -20,7 +20,7 @@ class Course(models.Model):
 
 
 class Lesson(models.Model):
-    """Модель урока"""
+    """Модель урока."""
     title = models.CharField(max_length=35, verbose_name='название')
     description = models.TextField(verbose_name='Описание')
     preview = models.ImageField(verbose_name='Превью(изображение)', null=True, blank=True, upload_to='materials/lesson')
