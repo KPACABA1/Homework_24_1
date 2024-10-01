@@ -11,15 +11,28 @@ class CourseViewSet(ModelViewSet):
     queryset = Course.objects.all()
 
     def get_serializer_class(self):
+        """Метод для выбора другого сериализатора при создании модели"""
         if self.action == 'create':
             return CourseCreateSerializer
         return CourseSerializer
+
+    def perform_create(self, serializer):
+        """Метод для автоматической привязки создающего пользователя к модели курс"""
+        course = serializer.save()
+        course.creator = self.request.user
+        course.save()
 
 
 class LessonCreateAPIView(CreateAPIView):
     """Класс для создания моделей уроков"""
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
+
+    def perform_create(self, serializer):
+        """Метод для автоматической привязки создающего пользователя к модели урок"""
+        lesson = serializer.save()
+        lesson.creator = self.request.user
+        lesson.save()
 
 
 class LessonListAPIView(ListAPIView):

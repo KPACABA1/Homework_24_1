@@ -1,9 +1,7 @@
+import materials.models
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
-
-from materials.models import Course, Lesson
-
 
 # Create your models here.
 class User(AbstractUser):
@@ -30,9 +28,9 @@ class Payment(models.Model):
     """Модель платежа"""
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь', related_name='user')
     date_of_payment = models.DateField(verbose_name='Дата оплаты')
-    paid_course = models.ForeignKey(Course, on_delete=models.SET_NULL, verbose_name='Оплаченный курс',
+    paid_course = models.ForeignKey(materials.models.Course, on_delete=models.SET_NULL, verbose_name='Оплаченный курс',
                                     related_name='paid_course', null=True, blank=True)
-    paid_lesson = models.ForeignKey(Lesson, on_delete=models.SET_NULL, verbose_name='Оплаченный урок',
+    paid_lesson = models.ForeignKey(materials.models.Lesson, on_delete=models.SET_NULL, verbose_name='Оплаченный урок',
                                     related_name='paid_lesson', null=True, blank=True)
     payment_amount = models.PositiveIntegerField(verbose_name='Сумма оплаты')
     payment_method = models.CharField(max_length=37,
