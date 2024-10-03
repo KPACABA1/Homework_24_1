@@ -32,3 +32,10 @@ class UserSerializer(ModelSerializer):
     class Meta:
         model = User
         fields = ('id', 'email', 'phone_number', 'city', 'profile_picture', 'payment_history', 'password')
+
+
+class UserNonCreatorSerializer(ModelSerializer):
+    """Сериализатор для детального просмотра модели пользователя, если просматривающий пользователь не хозяин профиля."""
+    class Meta:
+        model = User
+        fields = ('id', 'email', 'phone_number', 'city', 'profile_picture')
