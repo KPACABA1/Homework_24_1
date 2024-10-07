@@ -1,11 +1,15 @@
 from rest_framework.fields import SerializerMethodField
-from rest_framework.serializers import ModelSerializer
+from rest_framework.serializers import ModelSerializer, CharField
 
 from materials.models import Course, Lesson
+from materials.validators import validate_links
 
 
 class LessonSerializer(ModelSerializer):
     """Сериализатор для моделей уроков."""
+    # Ввожу проверку на то, что ссылка из YouTube
+    link_to_video = CharField(validators=[validate_links])
+
     class Meta:
         model = Lesson
         fields = '__all__'
