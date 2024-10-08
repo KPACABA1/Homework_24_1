@@ -1,9 +1,12 @@
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
-from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView
+from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView, \
+    get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 
-from materials.models import Course, Lesson
-from materials.serializers import CourseSerializer, LessonSerializer, CourseCreateSerializer
+from materials.models import Course, Lesson, Subscription
+from materials.serializers import CourseSerializer, LessonSerializer, CourseCreateSerializer, SubscriptionSerializer
 from users.permissions import ModeratorPermission, CreatorPermission
 
 
@@ -38,7 +41,8 @@ class CourseViewSet(ModelViewSet):
         elif self.action == 'list':
             self.permission_classes = (ModeratorPermission,)
 
-        # Если действие на удаление, то проверяем не является ли пользователь модератором и является ли он создателем курса
+        # Если действие на удаление, то проверяем не является ли пользователь модератором и является ли он создателем
+        # курса
         elif self.action == 'destroy':
             self.permission_classes = (~ModeratorPermission | CreatorPermission,)
 
@@ -89,3 +93,29 @@ class LessonDestroyAPIView(DestroyAPIView):
     serializer_class = LessonSerializer
     # Доступ имеет только создатель урока
     permission_classes = (~ModeratorPermission | CreatorPermission, IsAuthenticated)
+
+
+class SubscriptionAPIView(APIView):
+    """Класс для создания или удаления подписки на курс"""
+    queryset = Subscription.objects.all()
+    serializer_class = SubscriptionSerializer
+
+    def post(self, *args, **kwargs):
+        # Получаю пользователя, id курса и сам курс
+        user = self.request.user
+        course_id = self.request.data.get('course')
+        course = get_object_or_404(Course, pk=course_id)
+
+        try:
+            # Если программа смогла найти подписку, то я её удаляю
+            subscription_find = Subscription.objects.get(user=user, course=course)
+            subscription_find.delete()
+            message = 'Подписка удалена'
+        except Subscription.DoesNotExist:
+            # Если программа не смогла найти подписку, то я создаю эту подписку
+            subscription_create = Subscription.objects.create(user=user, course=course)
+            subscription_create.save()
+            message = 'Подписка добавлена'
+
+        # Возвращаю сообщение о статусе подписки
+        return Response({"message": message})

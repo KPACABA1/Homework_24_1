@@ -3,9 +3,10 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 from phonenumber_field.modelfields import PhoneNumberField
 
+
 # Create your models here.
 class User(AbstractUser):
-    """Модель пользователя"""
+    """Модель пользователя."""
     username = None
 
     email = models.EmailField(verbose_name='Почта', unique=True)
@@ -25,7 +26,7 @@ class User(AbstractUser):
 
 
 class Payment(models.Model):
-    """Модель платежа"""
+    """Модель платежа."""
     user = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name='Пользователь', related_name='user')
     date_of_payment = models.DateField(verbose_name='Дата оплаты')
     paid_course = models.ForeignKey(materials.models.Course, on_delete=models.SET_NULL, verbose_name='Оплаченный курс',

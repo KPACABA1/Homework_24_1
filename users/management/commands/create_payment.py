@@ -5,7 +5,7 @@ from users.models import Payment, User
 
 
 class Command(BaseCommand):
-    """Команда для создания 2 платежей(1 платеж за курс, 2 за урок)"""
+    """Команда для создания 2 платежей(1 платеж за курс, 2 за урок)."""
     def handle(self, *args, **options):
         # создаю пользователя специально для команды
         user = User.objects.create(email='test_command@yandex.ru')
