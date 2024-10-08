@@ -6,6 +6,7 @@ from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView,
 from rest_framework.permissions import IsAuthenticated
 
 from materials.models import Course, Lesson, Subscription
+from materials.paginators import CourseAndLessonPagination
 from materials.serializers import CourseSerializer, LessonSerializer, CourseCreateSerializer, SubscriptionSerializer
 from users.permissions import ModeratorPermission, CreatorPermission
 
@@ -69,6 +70,9 @@ class LessonListAPIView(ListAPIView):
     serializer_class = LessonSerializer
     # Доступ имеют только модераторы
     permission_classes = (ModeratorPermission, IsAuthenticated)
+
+    # Указываю пагинацию
+    pagination_class = CourseAndLessonPagination
 
 
 class LessonRetrieveAPIView(RetrieveAPIView):
