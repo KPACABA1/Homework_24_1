@@ -16,6 +16,9 @@ class CourseViewSet(ModelViewSet):
     """ViewSet для моделей курсов."""
     queryset = Course.objects.all()
 
+    # Указываю пагинацию
+    pagination_class = CourseAndLessonPagination
+
     def get_serializer_class(self):
         """Метод для выбора другого сериализатора при создании модели."""
         if self.action == 'create':
