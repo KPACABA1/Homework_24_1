@@ -51,11 +51,11 @@ class UserRetrieveAPIView(RetrieveAPIView):
         return UserNonCreatorSerializer
 
 
-
 class UserDestroyAPIView(DestroyAPIView):
     """Класс для удаления пользователя."""
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
 
 class PaymentCreateAPIView(CreateAPIView):
     """Класс для создания платежей пользователей."""

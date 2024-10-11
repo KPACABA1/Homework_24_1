@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from rest_framework.generics import ListAPIView, CreateAPIView, RetrieveAPIView, UpdateAPIView, DestroyAPIView, \
     get_object_or_404
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
 from materials.models import Course, Lesson, Subscription
 from materials.paginators import CourseAndLessonPagination
@@ -41,9 +41,9 @@ class CourseViewSet(ModelViewSet):
         elif self.action in ['update', 'retrieve']:
             self.permission_classes = (ModeratorPermission | CreatorPermission,)
 
-        # Если действие на просмотр всех курсов, то допускаем только модератора
+        # Если действие на просмотр всех курсов, то допускаем только модератора или админа
         elif self.action == 'list':
-            self.permission_classes = (ModeratorPermission,)
+            self.permission_classes = (ModeratorPermission | IsAdminUser,)
 
         # Если действие на удаление, то проверяем не является ли пользователь модератором и является ли он создателем
         # курса
@@ -72,7 +72,7 @@ class LessonListAPIView(ListAPIView):
     queryset = Lesson.objects.all()
     serializer_class = LessonSerializer
     # Доступ имеют только модераторы
-    permission_classes = (ModeratorPermission, IsAuthenticated)
+    permission_classes = (ModeratorPermission | IsAdminUser, IsAuthenticated)
 
     # Указываю пагинацию
     pagination_class = CourseAndLessonPagination
@@ -125,4 +125,4 @@ class SubscriptionAPIView(APIView):
             message = 'Подписка добавлена'
 
         # Возвращаю сообщение о статусе подписки
-        return Response({"message": message})
+        return Response({'message': message})
