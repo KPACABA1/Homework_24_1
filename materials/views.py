@@ -1,3 +1,5 @@
+from django.utils.decorators import method_decorator
+from drf_yasg.utils import swagger_auto_schema
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
@@ -12,6 +14,10 @@ from users.permissions import ModeratorPermission, CreatorPermission
 
 
 # Create your views here.
+# Декоратор для CourseViewSet
+@method_decorator(name='list', decorator=swagger_auto_schema(
+    operation_description="Вывод списка курсов"
+))
 class CourseViewSet(ModelViewSet):
     """ViewSet для моделей курсов."""
     queryset = Course.objects.all()
