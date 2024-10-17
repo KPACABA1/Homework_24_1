@@ -148,7 +148,7 @@ class PaymentTestCase(APITestCase):
         url = reverse('users:payment-create')
 
         # Заполняю данные платежа
-        data = {'user': self.user.pk, 'date_of_payment': '2023-10-11', 'paid_course': self.course.pk,
+        data = {'date_of_payment': '2023-10-11', 'paid_course': self.course.pk,
                 'payment_amount': 15000, 'payment_method': 'cash'}
 
         # Делаю запрос на полученный урл
@@ -186,7 +186,9 @@ class PaymentTestCase(APITestCase):
                 "payment_method": self.payment.payment_method,
                 "user": self.user.pk,
                 "paid_course": self.course.pk,
-                "paid_lesson": None
+                "paid_lesson": None,
+                "id_session": self.payment.id_session,
+                "payment_link": self.payment.payment_link
             }
         ]
         data = response.json()

@@ -12,3 +12,4 @@ djangorestframework-simplejwt==5.3.1
 ipython==8.27.0
 drf-yasg==1.21.7
 setuptools==75.2.0
+stripe==11.1.0

@@ -9,6 +9,8 @@ from users.serializers import UserSerializer, PaymentSerializer, UserCreateSeria
 
 from django_filters.rest_framework import DjangoFilterBackend
 
+from users.services import conversion_rub_into_usd, create_stripe_price, create_stripe_session, create_stripe_product
+
 
 # Create your views here.
 class UserCreateAPIView(CreateAPIView):
@@ -61,6 +63,28 @@ class PaymentCreateAPIView(CreateAPIView):
     """Класс для создания платежей пользователей."""
     queryset = Payment.objects.all()
     serializer_class = PaymentSerializer
+
+    def perform_create(self, serializer):
+        """Метод для автоматической привязки создающего пользователя к модели платеж, конвертации платежа в USD,
+        создания цены Stripe, получения id сессии и ссылки на оплату."""
+        payment = serializer.save()
+        # Привязываем пользователя к модели платеж
+        payment.user = self.request.user
+        # Создаем продукт в Stripe из курса
+        if payment.paid_course:
+            stripe_product = create_stripe_product(payment.paid_course.title)
+        else:
+            stripe_product = create_stripe_product(payment.paid_lesson.title)
+        # Конвертируем рубли в USD
+        payment_amount_usd = conversion_rub_into_usd(payment.payment_amount)
+        # Создаем цену в Stripe
+        stripe_price = create_stripe_price(payment_amount_usd, stripe_product)
+        # Получаем id сессии и ссылку на оплату
+        session_id, session_url = create_stripe_session(stripe_price)
+        # Записываем id сессии и ссылку на оплату в модель платежа
+        payment.id_session = session_id
+        payment.payment_link = session_url
+        payment.save()
 
 
 class PaymentListAPIView(ListAPIView):
