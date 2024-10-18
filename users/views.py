@@ -5,11 +5,12 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from users.models import User, Payment
 from users.permissions import UserHimself
 from users.serializers import UserSerializer, PaymentSerializer, UserCreateSerializer, UserUpdateSerializer, \
-    UserNonCreatorSerializer
+    UserNonCreatorSerializer, PaymentStatusSerializer
 
 from django_filters.rest_framework import DjangoFilterBackend
 
-from users.services import conversion_rub_into_usd, create_stripe_price, create_stripe_session, create_stripe_product
+from users.services import conversion_rub_into_usd, create_stripe_price, create_stripe_session, create_stripe_product, \
+    checking_status_payment
 
 
 # Create your views here.
@@ -98,3 +99,16 @@ class PaymentListAPIView(ListAPIView):
     # Добавляю сортировку по дате оплаты курса или урока
     filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
     ordering_fields = ('date_of_payment',)
+
+
+class PaymentStatusRetrieveView(RetrieveAPIView):
+    """Класс для просмотра статуса платежа по id сессии"""
+    queryset = Payment.objects.all()
+    serializer_class = PaymentStatusSerializer
+
+    def get_object(self):
+        payment_pk = self.kwargs['pk']
+        payment = Payment.objects.get(pk=payment_pk)
+        print(payment.id_session)
+        payment.payment_status = checking_status_payment(payment.id_session)
+        payment.save()
