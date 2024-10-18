@@ -23,8 +23,6 @@ urlpatterns = [
     # Урлы для платежей
     path('payment/', PaymentListAPIView.as_view(), name='payment-list'),
     path('payment/create/', PaymentCreateAPIView.as_view(), name='payment-create'),
-
-    # Урл для проверки статуса оплаты
     path('payment/<int:pk>/status/', PaymentStatusRetrieveView.as_view(), name='payment-status'),
 
     # Урлы для ACCESS и REFRESH токенов

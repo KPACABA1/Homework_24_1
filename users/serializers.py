@@ -46,4 +46,4 @@ class PaymentStatusSerializer(ModelSerializer):
     """Сериализатор для просмотра статуса платежа по id сессии"""
     class Meta:
         model = Payment
-        fields = ('payment_status',)
+        fields = ('payment_status', 'id_session')

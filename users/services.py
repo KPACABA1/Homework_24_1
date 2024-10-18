@@ -62,4 +62,5 @@ def create_stripe_session(stripe_price):
 
 def checking_status_payment(id_session):
     """Проверка статуса оплаты"""
-    stripe.checkout.Session.retrieve(id_session,)
+    payment_status = stripe.checkout.Session.retrieve(id_session,)
+    return payment_status['payment_status']

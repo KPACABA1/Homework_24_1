@@ -107,8 +107,11 @@ class PaymentStatusRetrieveView(RetrieveAPIView):
     serializer_class = PaymentStatusSerializer
 
     def get_object(self):
+        """Метод для получения статуса оплаты"""
+        # Получаю pk платежа и сам платеж
         payment_pk = self.kwargs['pk']
         payment = Payment.objects.get(pk=payment_pk)
-        print(payment.id_session)
+        # Получаю статус платежа и сохраняю объект
         payment.payment_status = checking_status_payment(payment.id_session)
         payment.save()
+        return Payment.objects.get(pk=payment_pk)

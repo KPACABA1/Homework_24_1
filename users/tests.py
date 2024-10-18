@@ -139,7 +139,8 @@ class PaymentTestCase(APITestCase):
         self.course = Course.objects.create(title='test_case_title', description='test_case_description',
                                             creator=self.user)
         self.payment = Payment.objects.create(user=self.user, date_of_payment='2024-10-11', paid_course=self.course,
-                                              payment_amount=15000, payment_method='cash')
+                                              payment_amount=15000, payment_method='cash',
+                                              id_session='cs_test_a1dDPxHLFpMZlQpBKNNC8YnpB0InWUMPEB28ZS160iQ0Y5lIICQkacgdlH')
         self.client.force_authenticate(user=self.user)
 
     def test_payment_create(self):
@@ -188,10 +189,32 @@ class PaymentTestCase(APITestCase):
                 "paid_course": self.course.pk,
                 "paid_lesson": None,
                 "id_session": self.payment.id_session,
-                "payment_link": self.payment.payment_link
+                "payment_link": self.payment.payment_link,
+                "payment_status": None
             }
         ]
         data = response.json()
         self.assertEqual(
             data, result
+        )
+
+    def test_payment_status(self):
+        """Тест на просмотр статуса оплаты."""
+        # Получаю урл для информации о статусе оплаты
+        url = reverse('users:payment-status', args=(self.payment.pk,))
+
+        # Делаю запрос на полученный урл
+        response = self.client.get(url)
+
+        # Преобразую ответ в JSON
+        data = response.json()
+
+        # Тест статус код
+        self.assertEqual(
+            response.status_code, status.HTTP_200_OK
+        )
+
+        # Тест создание названия курса
+        self.assertEqual(
+            data.get('id_session'), self.payment.id_session
         )
