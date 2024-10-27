@@ -12,6 +12,7 @@ from materials.paginators import CourseAndLessonPagination
 from materials.serializers import CourseSerializer, LessonSerializer, CourseCreateSerializer, SubscriptionSerializer
 from users.permissions import ModeratorPermission, CreatorPermission
 
+from materials.tasks import sending_email_to_course_subscribers
 
 # Create your views here.
 # Декоратор для CourseViewSet
@@ -45,7 +46,7 @@ class CourseViewSet(ModelViewSet):
 
         # Если действие на обновление или просмотр, то допускаем модератора или создателя курса
         elif self.action in ['update', 'retrieve']:
-            self.permission_classes = (ModeratorPermission | CreatorPermission,)
+            self.permission_classes = (ModeratorPermission | CreatorPermission | IsAdminUser,)
 
         # Если действие на просмотр всех курсов, то допускаем только модератора или админа
         elif self.action == 'list':
@@ -57,6 +58,23 @@ class CourseViewSet(ModelViewSet):
             self.permission_classes = (~ModeratorPermission | CreatorPermission,)
 
         return super().get_permissions()
+
+    def perform_update(self, serializer):
+        """Метод для асинхронной рассылки писем подписанным на курс пользователям в случае обновления курса."""
+        # Получаю название курса
+        course_name = self.get_object()
+
+        # Получаю queryset подписанных пользователей
+        queryset_users_subscribed_to_course = Subscription.objects.filter(course=course_name)
+
+        # Создаю список с пользователями которым надо отправить письмо об обновлении курса
+        email_course_subscribers_list = []
+        for email_users in queryset_users_subscribed_to_course:
+            email_course_subscribers_list.append(email_users.user.email)
+
+        # Добавляю отложенную задачу по отправке писем подписчикам курса
+        sending_email_to_course_subscribers.delay(email_course_subscribers_list)
+        serializer.save()
 
 
 class LessonCreateAPIView(CreateAPIView):

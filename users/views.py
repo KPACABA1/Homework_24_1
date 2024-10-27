@@ -102,7 +102,7 @@ class PaymentListAPIView(ListAPIView):
 
 
 class PaymentStatusRetrieveView(RetrieveAPIView):
-    """Класс для просмотра статуса платежа по id сессии"""
+    """Класс для просмотра статуса платежа по id сессии."""
     queryset = Payment.objects.all()
     serializer_class = PaymentStatusSerializer
 

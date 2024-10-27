@@ -1,4 +1,4 @@
-Django
+Django==4.2.2
 djangorestframework
 psycopg2-binary
 python-dotenv
@@ -13,3 +13,5 @@ ipython==8.27.0
 drf-yasg==1.21.7
 setuptools==75.2.0
 stripe==11.1.0
+celery==5.4.0
+redis==5.2.0

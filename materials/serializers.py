@@ -23,8 +23,6 @@ class CourseSerializer(ModelSerializer):
     # Добавляю дополнительное поле, чтобы выводилось подписан ли текущий пользователь курс или нет
     subscription = SerializerMethodField()
 
-    lesson_info = LessonSerializer(many=True, source='course')
-
     def get_number_of_lessons(self, course):
         """Метод для получения дополнительного поля - количество уроков."""
         return course.course.count()
@@ -33,7 +31,7 @@ class CourseSerializer(ModelSerializer):
         """Метод для вывода подписан ли текущий пользователь курс или нет."""
         try:
             # Пытаюсь получить подписку на курс
-            subscription = Subscription.objects.get(user=course.creator, course=course)
+            subscription = Subscription.objects.get(user=self.context['request'].user, course=course)
             return 'Подписка активна'
 
         except Subscription.DoesNotExist:
@@ -42,7 +40,7 @@ class CourseSerializer(ModelSerializer):
 
     class Meta:
         model = Course
-        fields = ('id', 'title', 'preview', 'description', 'number_of_lessons', 'lesson_info', 'creator', 'subscription')
+        fields = ('id', 'title', 'preview', 'description', 'number_of_lessons', 'creator', 'subscription')
 
 
 class CourseCreateSerializer(ModelSerializer):

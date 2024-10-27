@@ -127,17 +127,6 @@ class CourseTestCase(APITestCase):
                     "preview": None,
                     "description": self.course.description,
                     "number_of_lessons": Lesson.objects.filter(course=self.course.pk).count(),
-                    "lesson_info": [
-                        {
-                            "id": self.lesson.pk,
-                            "link_to_video": None,
-                            "title": self.lesson.title,
-                            "description": self.lesson.description,
-                            "preview": None,
-                            "course": self.course.pk,
-                            "creator": self.user.pk
-                        }
-                    ],
                     "creator": self.user.pk,
                     "subscription": "Подписка не активна"
                 }
