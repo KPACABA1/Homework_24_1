@@ -16,6 +16,7 @@ def sending_email_to_course_subscribers(email_course_subscribers):
     send_mail('Привет!', 'Курс на который ты подписан обновился', EMAIL_HOST_USER,
               email_course_subscribers)
 
+
 @shared_task
 def blocking_user():
     """Периодическая задача которая блокирует пользователей если они были последний раз в сети более 30 дней."""

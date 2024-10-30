@@ -48,4 +48,3 @@ class Payment(models.Model):
 
     def __str__(self):
         return f'Пользователь - {self.user}, оплатил {self.payment_amount}'
-

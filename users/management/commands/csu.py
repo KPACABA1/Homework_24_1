@@ -7,7 +7,9 @@ from dotenv import load_dotenv
 import os
 load_dotenv()
 
+
 class Command(BaseCommand):
+    """Команда для создания админа."""
     def handle(self, *args, **options):
         user = User.objects.create(email=os.getenv('mail'))
         user.set_password(os.getenv('password_database'))
