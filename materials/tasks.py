@@ -32,4 +32,3 @@ def blocking_user():
         if today - user.last_login > timedelta(days=1):
             user.is_active = False
             user.save()
-            print("четко")
